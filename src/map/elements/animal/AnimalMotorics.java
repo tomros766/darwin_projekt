@@ -16,17 +16,16 @@ public class AnimalMotorics {
     }
 
     public void spin() {
-        int spin = animal.genoType.genes.get(new Random().nextInt(32));
-        animal.orientation.add(MapDirection.valueOf(spin));
+        int spin = animal.genoType.genes.get(new Random().nextInt(animal.genoType.genes.size()));
+        for(int i = 0; i < spin; i++)
+            animal.orientation = animal.orientation.next();
     }
 
     public Vector2d getNewPosition(){
         Vector2d newPosition = animal.position.copy().add(animal.getOrientation().toUnitVector());
-        if(newPosition.x < 0) newPosition.x = (map.width - newPosition.x) % map.width;
-        if(newPosition.y < 0) newPosition.y = (map.height - newPosition.y) % map.height;
-        if(newPosition.x >= map.width) newPosition.x = newPosition.x % map.width;
-        if(newPosition.y >= map.height) newPosition.y = newPosition.y % map.height;
         return newPosition;
 
     }
+
+
 }

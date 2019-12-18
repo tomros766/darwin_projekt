@@ -16,6 +16,7 @@ public class Animal implements Comparable{
     double energy;
     private AnimalMotorics motorics;
     protected GenoType genoType;
+    protected ArrayList<Animal> children = new ArrayList<>();
 
 
     List<IPositionChangeObserver> observers = new ArrayList<>();
@@ -34,14 +35,20 @@ public class Animal implements Comparable{
         return this.energy;
     }
 
+    public ArrayList<Animal> getChildren() {
+        return children;
+    }
 
     public Animal procreate (RectangularMap map, Animal subservient, Vector2d newBeginning){
 
         double childEnergy = (this.energy + subservient.energy)/4;
         this.energy *= 0.75;
         subservient.energy *= 0.75;
-
-        return new Animal(newBeginning, new GenoType(this.genoType,subservient.genoType), map, childEnergy);
+        System.out.println("miracle of life");
+        Animal baby = new Animal(newBeginning, new GenoType(this.genoType,subservient.genoType), map, childEnergy);
+        this.children.add(baby);
+        subservient.children.add(baby);
+        return baby;
     }
 
     public void move(RectangularMap map){
@@ -96,4 +103,13 @@ public class Animal implements Comparable{
         if(((Animal) o).energy > this.energy) return -1;
         return 1;
     }
+
+    public int countChildren(){
+        return children.size();
+    }
+
+
+//    public int countDescendants(){
+//
+//    }
 }
