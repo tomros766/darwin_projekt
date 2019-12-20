@@ -8,13 +8,14 @@ import map.Vector2d;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Stream;
 
 public class Animal implements Comparable{
 
     public MapDirection orientation;
     public Vector2d position;
     double energy;
-    private AnimalMotorics motorics;
+    protected AnimalMotorics motorics;
     protected GenoType genoType;
     protected ArrayList<Animal> children = new ArrayList<>();
     private int age = 0;
@@ -83,7 +84,6 @@ public class Animal implements Comparable{
 
     public String toString(){
         return "c";
-//        return Integer.toString(this.orientation.getValue());
     }
 
     public MapDirection getOrientation(){
@@ -114,12 +114,10 @@ public class Animal implements Comparable{
         return 1;
     }
 
-    public int countChildren(){
-        return children.size();
+    public Stream<Animal> getDescendands() {
+        return Stream.concat(
+                this.children.stream(),
+                this.children.stream().flatMap(Animal::getDescendands)
+        ).distinct();
     }
-
-
-//    public int countDescendants(){
-//
-//    }
 }

@@ -1,6 +1,7 @@
 package map;
 
 import map.elements.animal.Animal;
+import map.elements.animal.FollowedAnimal;
 import map.elements.animal.GenoType;
 import org.w3c.dom.css.Rect;
 
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class MapStatistics {
     RectangularMap map;
-    public Animal animalFollowed;
+    public FollowedAnimal animalFollowed;
     private int countDeadAnimals = 0;
     private double avgLifeTime = 0.0;
 

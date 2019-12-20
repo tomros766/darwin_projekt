@@ -6,28 +6,20 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Cursor;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TabPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import map.RectangularMap;
 import map.Vector2d;
 import map.elements.MapElement;
 import map.elements.animal.Animal;
 import map.elements.animal.AnimalGenerator;
+import map.elements.animal.FollowedAnimal;
 
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 public class Main extends Application {
@@ -37,7 +29,6 @@ public class Main extends Application {
     private int count = 0;
     private RectangularMap map = new RectangularMap(30,20,1,100,15,0.3);
     CanvasMap canvasMap = new CanvasMap(map);
-    Tooltip tooltip = new Tooltip();
 
 
 
@@ -46,12 +37,11 @@ public class Main extends Application {
             BorderPane root = new BorderPane();
             root.setPrefSize(1366,768);
             Scene scene = new Scene(root);
+            FollowedAnimalGrid followedAnimalGrid = new FollowedAnimalGrid(canvasMap);
 
 
 
             root.setCenter(canvasMap);
-
-
 
 
 
@@ -104,6 +94,17 @@ public class Main extends Application {
                             System.out.println("day: " + count);
                             map.circleOfLife();
                             System.out.println(map.getAnimals().size());
+
+                            if(map.statistics.animalFollowed != null){
+                                if(!rightPanel.getChildren().contains(followedAnimalGrid))
+                                    rightPanel.getChildren().add(followedAnimalGrid);
+
+                                followedAnimalGrid.updateStatistics();
+                            }
+                            else{
+                                rightPanel.getChildren().remove(followedAnimalGrid);
+                            }
+
                         }
                         canvasMap.refreshMap();
 
@@ -150,7 +151,7 @@ public class Main extends Application {
                         canvasMap.refreshMap();
                     }
                     else{
-                        if(map.statistics.animalFollowed != null) map.statistics.animalFollowed.followed = false;
+                        if(map.statistics.animalFollowed != null) map.statistics.animalFollowed.animal.followed = false;
                         map.statistics.animalFollowed = null;
                     }
                 }
@@ -182,7 +183,8 @@ public class Main extends Application {
             if(an.followed) an.followed = false;
         }
         animal.followed = true;
-        map.statistics.animalFollowed = animal;
+//        map.statistics.animalFollowed.animal =  animal;
+        map.statistics.animalFollowed = new FollowedAnimal(animal, canvasMap);
     }
 
     public Vector2d mousePosition(MouseEvent mouseEvent){
@@ -194,10 +196,6 @@ public class Main extends Application {
     }
 
 
-    private void showGenotype(MapElement animalHovered) {
-        Tooltip.install(canvasMap, tooltip);
-        tooltip.setText(animalHovered.getAnimals().get(0).getGenoType().toString());
-    }
 
     public static void main(String[] args) {
             launch(args);

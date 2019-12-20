@@ -28,12 +28,16 @@ public class CanvasMap extends Canvas {
         gc = this.getGraphicsContext2D();
     }
 
+    public RectangularMap getMap() {
+        return map;
+    }
+
     public void refreshMap(){
         round++;
         gc.clearRect(0,0,this.getWidth(),this.getHeight());
         Color color;
         for(Animal animal: map.getAnimals()) {
-            if(animal != map.statistics.animalFollowed){
+            if(map.statistics.animalFollowed == null || animal != map.statistics.animalFollowed.animal){
                 color = Color.color(Math.min(1,Math.max(animal.getEnergy()/map.startEnergy,0)),0,0);
             }
             else{
