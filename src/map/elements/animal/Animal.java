@@ -83,7 +83,7 @@ public class Animal implements Comparable{
     }
 
     public String toString(){
-        return "c";
+        return "wiek: " + age + ", energia: " + getEnergy();
     }
 
     public MapDirection getOrientation(){

@@ -11,7 +11,7 @@ public class FollowedAnimal {
     CanvasMap canvasMap;
     int roundCount = 0;
     public Animal animal;
-    int timeOfDeath;
+    int timeOfDeath = 0;
 
 
 
@@ -39,7 +39,7 @@ public class FollowedAnimal {
 
     public void timeGoesBy(){
         roundCount++;
-        if(isDead()) timeOfDeath = roundCount;
+        if(isDead() && timeOfDeath==0) timeOfDeath = roundCount;
     }
 
     public boolean isDead(){

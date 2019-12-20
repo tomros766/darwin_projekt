@@ -58,14 +58,16 @@ public class FollowedAnimalGrid extends GridPane {
         this.followedAnimal = canvasMap.map.statistics.animalFollowed;
         if(followedAnimal != null){
             genome.setText(followedAnimal.animal.getGenoType().toString());
+            followedAnimal.timeGoesBy();
+            countInfo.setText("Obserwujesz to zwierzę od " + followedAnimal.countRounds() + " epok.");
             if(!followedAnimal.isDead()){
-                followedAnimal.timeGoesBy();
-                countInfo.setText("Obserwujesz to zwierzę od " + followedAnimal.countRounds() + " epok.");
                 childrenTillNow.setText(Integer.toString(followedAnimal.countChildren()));
                 descendandsTillNow.setText(Long.toString(followedAnimal.countDescendands()));
+                timeOfDeath.setText("");
             }
             else{
-                timeOfDeath.setText("Śmierć nastąpiła w " + followedAnimal.getTimeOfDeath() + ". rundzie");
+                timeOfDeath.setText("Śmierć nastąpiła po " + followedAnimal.getTimeOfDeath() + ". epokach. \n" +
+                        "Zwierzę przeżyło " + followedAnimal.animal.getAge() + " epok.");
                 if(!this.getChildren().contains(timeOfDeath))
                     this.getChildren().add(timeOfDeath);
             }

@@ -8,6 +8,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Separator;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -29,7 +30,7 @@ public class Main extends Application {
     private int count = 0;
     private RectangularMap map = new RectangularMap(30,20,1,100,15,0.3);
     CanvasMap canvasMap = new CanvasMap(map);
-
+    FollowedAnimalGrid followedAnimalGrid = new FollowedAnimalGrid(canvasMap);
 
 
     @Override
@@ -37,7 +38,7 @@ public class Main extends Application {
             BorderPane root = new BorderPane();
             root.setPrefSize(1366,768);
             Scene scene = new Scene(root);
-            FollowedAnimalGrid followedAnimalGrid = new FollowedAnimalGrid(canvasMap);
+
 
 
 
@@ -55,7 +56,7 @@ public class Main extends Application {
             Button pause = new Button("Zatrzymaj");
             final Boolean[] running = {true};
 
-            rightPanel.getChildren().add(pause);
+            rightPanel.getChildren().addAll(pause, new Separator());
 
 
                 //siatka z danymi mapy
@@ -64,7 +65,9 @@ public class Main extends Application {
 
 
             //koniec panelu z opcjami
-            rightPanel.getChildren().add(statistics);
+            rightPanel.getChildren().addAll(statistics, new Separator());
+
+
             AnimalGenerator generator = new AnimalGenerator();
 
             for(int i = 0; i < 40; i++){
@@ -149,10 +152,13 @@ public class Main extends Application {
                         System.out.println("wybrano zwierzę");
                         followAnimal(map.getOccupied().get(position).getAnimals());
                         canvasMap.refreshMap();
+                        if(!rightPanel.getChildren().contains(followedAnimalGrid))
+                            rightPanel.getChildren().add(followedAnimalGrid);
                     }
                     else{
                         if(map.statistics.animalFollowed != null) map.statistics.animalFollowed.animal.followed = false;
                         map.statistics.animalFollowed = null;
+                        followedAnimalGrid.updateStatistics();
                     }
                 }
             });
@@ -167,6 +173,7 @@ public class Main extends Application {
                     else {
                         running[0] = true;
                         pause.setText("Zatrzymaj");
+                        rightPanel.getChildren().remove(followedAnimalGrid);
                     }
                 }
             });
@@ -177,14 +184,18 @@ public class Main extends Application {
 
 
     private void followAnimal(ArrayList<Animal> animals) {
-        Animal animal = animals.get(0);
+        Animal animal = null;
+
+        if(animals.size() > 1) animal = new AlertBox().display(animals);
+        if(animal == null) animal = animals.get(0);
+
         System.out.println(animal.position);
         for(Animal an : map.getAnimals()){
             if(an.followed) an.followed = false;
         }
         animal.followed = true;
-//        map.statistics.animalFollowed.animal =  animal;
         map.statistics.animalFollowed = new FollowedAnimal(animal, canvasMap);
+        followedAnimalGrid.updateStatistics();
     }
 
     public Vector2d mousePosition(MouseEvent mouseEvent){

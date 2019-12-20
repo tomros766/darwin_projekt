@@ -47,7 +47,7 @@ public class MapElement {
     }
 
     public void removeAnimal(Animal animal){
-        if(animals.isEmpty()) throw new IllegalCallerException("This list is empty!");
+        if(animals!=null && animals.isEmpty()) throw new IllegalCallerException("This list is empty!");
         this.animals.remove(animal);
         if(animals.size()<2) type = MapElementType.ANIMAL;
     }
