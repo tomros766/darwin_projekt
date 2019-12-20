@@ -35,14 +35,19 @@ public class Main extends Application {
     Stage window;
 
     private int count = 0;
-    private RectangularMap map = new RectangularMap(100,100,1,100,30,0.3);
+    private RectangularMap map = new RectangularMap(30,20,1,100,15,0.3);
     CanvasMap canvasMap = new CanvasMap(map);
     Tooltip tooltip = new Tooltip();
+
 
 
     @Override
         public void start(Stage primaryStage) {
             BorderPane root = new BorderPane();
+            root.setPrefSize(1366,768);
+            Scene scene = new Scene(root);
+
+
 
             root.setCenter(canvasMap);
 
@@ -72,18 +77,18 @@ public class Main extends Application {
             rightPanel.getChildren().add(statistics);
             AnimalGenerator generator = new AnimalGenerator();
 
-            for(int i = 0; i < 200; i++){
+            for(int i = 0; i < 40; i++){
                 generator.generateAnimal(map);
                 System.out.println(i);
             }
 
-            for(int i = 0; i < 2000; i++){
+            for(int i = 0; i < 100; i++){
                 System.out.println(i);
                 map.growGrass();
             }
 
 
-            Scene scene = new Scene(root);
+
 
 
         Thread thread = new Thread(new Runnable() {
@@ -99,11 +104,11 @@ public class Main extends Application {
                             System.out.println("day: " + count);
                             map.circleOfLife();
                             System.out.println(map.getAnimals().size());
-                            canvasMap.refreshMap();
                         }
+                        canvasMap.refreshMap();
 
                         statistics.animalCount.setText(Integer.toString(map.getAnimals().size()));
-                        statistics.roundCount.setText(Integer.toString(canvasMap.round));
+                        statistics.roundCount.setText(Integer.toString(count));
                         statistics.grassCount.setText(Integer.toString(map.getGrasses().size()));
                         statistics.avgEnVal.setText(Integer.toString(map.statistics.getAvgEnergy()));
                         statistics.domGenomVal.setText(map.statistics.getDominantGenoType().toString());
@@ -139,11 +144,14 @@ public class Main extends Application {
                 @Override
                 public void handle(MouseEvent mouseEvent) {
                     Vector2d position = mousePosition(mouseEvent);
-                    System.out.println("("+mouseEvent.getX() + ", "+mouseEvent.getY() +") - " + position);
                     if(map.getOccupied().containsKey(position) && map.getOccupied().get(position).hasAnimals()){
-                        System.out.println("masz tu kurwa zwierze");
+                        System.out.println("wybrano zwierzę");
                         followAnimal(map.getOccupied().get(position).getAnimals());
                         canvasMap.refreshMap();
+                    }
+                    else{
+                        if(map.statistics.animalFollowed != null) map.statistics.animalFollowed.followed = false;
+                        map.statistics.animalFollowed = null;
                     }
                 }
             });
@@ -154,13 +162,10 @@ public class Main extends Application {
                     if(running[0]) {
                         running[0] = false;
                         pause.setText("Wznów");
-
-
                     }
                     else {
                         running[0] = true;
                         pause.setText("Zatrzymaj");
-
                     }
                 }
             });

@@ -5,6 +5,7 @@ import map.elements.animal.GenoType;
 
 public class World {
     public static void main(String[] args) {
+
         int width = 20;
         int height = 10;
         double startEnergy = 80;

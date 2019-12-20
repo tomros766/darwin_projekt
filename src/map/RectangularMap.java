@@ -53,17 +53,17 @@ public class RectangularMap implements IPositionChangeObserver {
         return new HashMap<>(occupied);
     }
 
-    public boolean place(Animal animal) {
+    public void place(Animal animal) {
 
         if (!this.isOccupied(animal.position))
             animal.addObserver(this);
 
         if (!this.occupied.containsKey(animal.position))
             this.occupied.put(animal.position, new MapElement(animal, this));
+        else
+            this.occupied.get(animal.position).addAnimal(animal);
 
-        this.occupied.get(animal.position).addAnimal(animal);
         this.animals.add(animal);
-        return true;
     }
 
     private void placeGrass(Grass grass) {
@@ -126,13 +126,14 @@ public class RectangularMap implements IPositionChangeObserver {
             statistics.updateAvgLifeTime(animal);
 
             animals.remove(animal);
-            animal.perish(this);
 
             if (occupied.containsKey(animal.position))
                 occupied.get(animal.position).removeAnimal(animal);
 
             if (occupied.containsKey(animal.position) && occupied.get(animal.position).getAnimals().isEmpty())
                 occupied.remove(animal.position);
+
+            animal.perish(this);
         }
     }
 
@@ -182,18 +183,16 @@ public class RectangularMap implements IPositionChangeObserver {
     }
 
     public Object objectAt(Vector2d position) {
-        if (this.occupied.containsKey(position) && this.occupied.get(position) != null)
-            return this.occupied.get(position);
-        return null;
+        return this.occupied.get(position);
     }
 
     public void positionChanged(Animal animal, Vector2d newPosition) {
         if (this.occupied.containsKey(animal.position)) {
             this.occupied.get(animal.position).removeAnimal(animal);
-            parsePosition(newPosition);
             if (this.occupied.get(animal.position).getAnimals().isEmpty()) this.occupied.remove(animal.position);
         }
 
+        parsePosition(newPosition);
         animal.position = newPosition;
 
         if (!this.occupied.containsKey(animal.position))
@@ -212,7 +211,5 @@ public class RectangularMap implements IPositionChangeObserver {
         if(position.x >= width) position.x = position.x % width;
         if(position.y >= height) position.y = position.y % height;
     }
-
-
 
 }

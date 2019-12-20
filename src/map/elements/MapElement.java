@@ -12,7 +12,6 @@ public class MapElement {
     private ArrayList<Animal> animals;
     private Grass grass;
     MapElementType type;
-    Vector2d position;
     RectangularMap map;
 
     public MapElement(Animal animal, RectangularMap map){
@@ -20,13 +19,11 @@ public class MapElement {
         this.animals.add(animal);
         this.map = map;
         type = MapElementType.ANIMAL;
-        this.position = animal.position.copy();
     }
 
     public MapElement(Grass grass, RectangularMap map){
         this.grass = grass;
         this.map = map;
-        this.position = grass.position.copy();
         if(!hasAnimals()) type = MapElementType.GRASS;
     }
 
@@ -40,10 +37,6 @@ public class MapElement {
 
     public MapElementType getType() {
         return type;
-    }
-
-    public Vector2d getPosition() {
-        return position;
     }
 
     public void addAnimal(Animal animal){

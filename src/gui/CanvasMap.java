@@ -1,5 +1,6 @@
 package gui;
 
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -39,13 +40,13 @@ public class CanvasMap extends Canvas {
                 color = Color.color(0,0,1);
             }
             gc.setFill(color);
-            gc.fillRect(animal.position.x*ratio,(animal.position.y+1)*ratio,ratio,ratio);
+            gc.fillRect(animal.position.x*ratio,(animal.position.y)*ratio,ratio,ratio);
 
 
         }
         for(MapElement grass: map.getGrasses()){
             gc.setFill(Color.GREEN);
-            gc.fillRect(grass.getPosition().x*ratio,grass.getPosition().y*ratio,ratio,ratio);
+            gc.fillRect(grass.getGrass().position.x*ratio,grass.getGrass().position.y*ratio,ratio,ratio);
         }
 
     }
