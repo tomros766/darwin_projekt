@@ -2,11 +2,13 @@ package map;
 
 import map.elements.MapElement;
 import map.elements.animal.Animal;
+import map.elements.animal.GenoType;
 import map.elements.grass.Grass;
 import map.elements.grass.GrassGrower;
 
 import java.awt.geom.Path2D;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class RectangularMap implements IPositionChangeObserver {
@@ -19,6 +21,8 @@ public class RectangularMap implements IPositionChangeObserver {
     final public MapBorders jungleBorders;
     protected List<Animal> animals = new ArrayList<>();
     protected HashMap<Vector2d, MapElement> occupied = new HashMap<>();
+    public MapStatistics statistics;
+
 
     public RectangularMap(int width, int height, double moveEnergy, double startEnergy, double plantEnergy, double jungleRatio) {
         this.width = width;
@@ -28,7 +32,9 @@ public class RectangularMap implements IPositionChangeObserver {
         this.plantEnergy = plantEnergy;
         this.jungleRatio = jungleRatio;
         jungleBorders = new MapBorders(this, jungleRatio);
+        statistics = new MapStatistics(this);
     }
+
 
     public ArrayList<Animal> getAnimals() {
         return new ArrayList<>(animals);
@@ -37,6 +43,7 @@ public class RectangularMap implements IPositionChangeObserver {
     public Collection<MapElement> getElementswAnimals() {
         return occupied.values().stream().filter(e -> e.hasAnimals()).distinct().collect(Collectors.toCollection(ArrayList::new));
     }
+
 
     public ArrayList<MapElement> getGrasses() {
         return occupied.values().stream().filter(e -> e.hasGrass() && !e.hasAnimals()).collect(Collectors.toCollection(ArrayList::new));
@@ -115,6 +122,9 @@ public class RectangularMap implements IPositionChangeObserver {
 
     private void cleanUp(ArrayList<Animal> dead) {
         for (Animal animal : dead) {
+
+            statistics.updateAvgLifeTime(animal);
+
             animals.remove(animal);
             animal.perish(this);
 
@@ -125,6 +135,8 @@ public class RectangularMap implements IPositionChangeObserver {
                 occupied.remove(animal.position);
         }
     }
+
+
 
     private void winnerEatsItAll(MapElement luckilyAlive) {
         ArrayList<Animal> strongest = luckilyAlive.getStrongestAnimal();
@@ -175,12 +187,14 @@ public class RectangularMap implements IPositionChangeObserver {
         return null;
     }
 
-    public void positionChanged(Vector2d oldPosition, Animal animal) {
-        if (this.occupied.containsKey(oldPosition)) {
-            this.occupied.get(oldPosition).removeAnimal(animal);
-            parsePosition(animal);
-            if (this.occupied.get(oldPosition).getAnimals().isEmpty()) this.occupied.remove(oldPosition);
+    public void positionChanged(Animal animal, Vector2d newPosition) {
+        if (this.occupied.containsKey(animal.position)) {
+            this.occupied.get(animal.position).removeAnimal(animal);
+            parsePosition(newPosition);
+            if (this.occupied.get(animal.position).getAnimals().isEmpty()) this.occupied.remove(animal.position);
         }
+
+        animal.position = newPosition;
 
         if (!this.occupied.containsKey(animal.position))
             this.occupied.put(animal.position, new MapElement(animal, this));
@@ -192,16 +206,13 @@ public class RectangularMap implements IPositionChangeObserver {
         return visualizer.draw(new Vector2d(0, 0), new Vector2d(width - 1, height - 1));
     }
 
-    private void parsePosition(Animal animal) {
-        if(animal.position.x < 0) animal.position.x = (width - animal.position.x) % width;
-        if(animal.position.y < 0) animal.position.y = (height - animal.position.y) % height;
-        if(animal.position.x >= width) animal.position.x = animal.position.x % width;
-        if(animal.position.y >= height) animal.position.y = animal.position.y % height;
+    private void parsePosition(Vector2d position) {
+        if(position.x < 0) position.x = (width - position.x) % width;
+        if(position.y < 0) position.y = (height - position.y) % height;
+        if(position.x >= width) position.x = position.x % width;
+        if(position.y >= height) position.y = position.y % height;
     }
 
-    public int getAvgEnergy(){
-        ArrayList<Double> energies = this.animals.stream().map(animal -> animal.getEnergy()).collect(Collectors.toCollection(ArrayList::new));
-        return (int) (energies.stream().reduce(0.0, (a,b) -> a+b)/energies.size());
-    }
+
 
 }

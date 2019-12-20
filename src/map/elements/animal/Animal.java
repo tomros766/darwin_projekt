@@ -17,6 +17,8 @@ public class Animal implements Comparable{
     private AnimalMotorics motorics;
     protected GenoType genoType;
     protected ArrayList<Animal> children = new ArrayList<>();
+    private int age = 0;
+    public boolean followed = false;
 
 
     List<IPositionChangeObserver> observers = new ArrayList<>();
@@ -39,6 +41,14 @@ public class Animal implements Comparable{
         return children;
     }
 
+    public int getAge() {
+        return age;
+    }
+
+    public GenoType getGenoType() {
+        return genoType;
+    }
+
     public Animal procreate (RectangularMap map, Animal subservient, Vector2d newBeginning){
 
         double childEnergy = (this.energy + subservient.energy)/4;
@@ -52,6 +62,7 @@ public class Animal implements Comparable{
     }
 
     public void move(RectangularMap map){
+        age++;
         motorics.spin();
         Vector2d newPosition = motorics.getNewPosition();
         this.positionChanged(newPosition);
@@ -88,11 +99,10 @@ public class Animal implements Comparable{
     }
 
     private void positionChanged(Vector2d newPosition){
-        Vector2d oldPosition = this.position.copy();
-        this.position = newPosition;
         for(IPositionChangeObserver observer : observers){
-            observer.positionChanged(oldPosition,this);
+            observer.positionChanged(this,newPosition);
         }
+        this.position = newPosition;
     }
 
     @Override

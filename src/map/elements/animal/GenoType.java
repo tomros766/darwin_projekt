@@ -1,9 +1,6 @@
 package map.elements.animal;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class GenoType {
     final ArrayList<Integer> genes;
@@ -29,7 +26,9 @@ public class GenoType {
     }
 
     public GenoType(GenoType par1, GenoType par2){
-        this.genes = prepareGenes(par1, par2);
+        ArrayList<Integer> genes = prepareGenes(par1, par2);
+        genes.sort(Integer::compareTo);
+        this.genes = genes;
 
         if (genes.size() != 32) throw new IllegalArgumentException("Given genotype is invalid! Wrong number of genes " + genes.size());
     }
@@ -68,5 +67,21 @@ public class GenoType {
     }
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GenoType genoType = (GenoType) o;
+        return Objects.equals(genes, genoType.genes);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(genes);
+    }
+
+    @Override
+    public String toString() {
+        return genes.toString();
+    }
 }

@@ -12,12 +12,12 @@ import map.elements.grass.Grass;
 import java.util.Collection;
 
 public class CanvasMap extends Canvas {
+    int round = 0;
     int width;
     int height;
     RectangularMap map;
     double ratio;
     GraphicsContext gc;
-    Color color;
     public CanvasMap(RectangularMap map){
         super(((double) map.width/ (double) map.height) * 600,600);
         this.map = map;
@@ -28,11 +28,19 @@ public class CanvasMap extends Canvas {
     }
 
     public void refreshMap(){
+        round++;
         gc.clearRect(0,0,this.getWidth(),this.getHeight());
+        Color color;
         for(Animal animal: map.getAnimals()) {
-            Color color = Color.color(Math.min(1,Math.max(animal.getEnergy()/map.startEnergy,0)),0,0);
+            if(animal != map.statistics.animalFollowed){
+                color = Color.color(Math.min(1,Math.max(animal.getEnergy()/map.startEnergy,0)),0,0);
+            }
+            else{
+                color = Color.color(0,0,1);
+            }
             gc.setFill(color);
             gc.fillRect(animal.position.x*ratio,(animal.position.y+1)*ratio,ratio,ratio);
+
 
         }
         for(MapElement grass: map.getGrasses()){

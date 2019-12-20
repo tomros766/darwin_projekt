@@ -3,5 +3,5 @@ package map;
 import map.elements.animal.Animal;
 
 public interface IPositionChangeObserver {
-    public void positionChanged(Vector2d oldPosition, Animal animal);
+    public void positionChanged(Animal animal, Vector2d newPosition);
 }
