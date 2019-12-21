@@ -35,6 +35,10 @@ public class RectangularMap implements IPositionChangeObserver {
         statistics = new MapStatistics(this);
     }
 
+    public RectangularMap(RectangularMap map){
+        this(map.width, map.height, map.moveEnergy, map.startEnergy, map.plantEnergy, map.jungleRatio);
+    }
+
 
     public ArrayList<Animal> getAnimals() {
         return new ArrayList<>(animals);

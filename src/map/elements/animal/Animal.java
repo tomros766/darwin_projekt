@@ -55,7 +55,7 @@ public class Animal implements Comparable{
         double childEnergy = (this.energy + subservient.energy)/4;
         this.energy *= 0.75;
         subservient.energy *= 0.75;
-        System.out.println("miracle of life");
+//        System.out.println("miracle of life");
         Animal baby = new Animal(newBeginning, new GenoType(this.genoType,subservient.genoType), map, childEnergy);
         this.children.add(baby);
         subservient.children.add(baby);

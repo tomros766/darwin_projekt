@@ -19,6 +19,8 @@ public class CanvasMap extends Canvas {
     RectangularMap map;
     double ratio;
     GraphicsContext gc;
+    boolean trackAlphas = false;
+
     public CanvasMap(RectangularMap map){
         super(((double) map.width/ (double) map.height) * 600,600);
         this.map = map;
@@ -35,13 +37,16 @@ public class CanvasMap extends Canvas {
     public void refreshMap(){
         round++;
         gc.clearRect(0,0,this.getWidth(),this.getHeight());
-        Color color;
+        Color color = Color.WHITE;
         for(Animal animal: map.getAnimals()) {
             if(map.statistics.animalFollowed == null || animal != map.statistics.animalFollowed.animal){
                 color = Color.color(Math.min(1,Math.max(animal.getEnergy()/map.startEnergy,0)),0,0);
             }
-            else{
-                color = Color.color(0,0,1);
+            if(trackAlphas && animal.getGenoType().equals(map.statistics.getDominantGenoType())){
+                color = Color.YELLOW;
+            }
+            if(map.statistics.animalFollowed != null && animal == map.statistics.animalFollowed.animal ){
+                color = Color.color(0,0,Math.min(1,Math.max(animal.getEnergy()/map.startEnergy,0)));
             }
             gc.setFill(color);
             gc.fillRect(animal.position.x*ratio,(animal.position.y)*ratio,ratio,ratio);
