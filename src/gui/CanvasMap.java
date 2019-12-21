@@ -6,7 +6,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import map.RectangularMap;
 import map.elements.MapElement;
-import map.elements.MapElementType;
 import map.elements.animal.Animal;
 import map.elements.grass.Grass;
 

@@ -1,8 +1,8 @@
 package map.elements.grass;
 
-import map.MapBorders;
+import map.MapTools.MapBorders;
 import map.RectangularMap;
-import map.Vector2d;
+import map.MapTools.Vector2d;
 
 import java.util.ArrayList;
 import java.util.Random;

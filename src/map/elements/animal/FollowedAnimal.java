@@ -1,8 +1,6 @@
 package map.elements.animal;
 
 import gui.CanvasMap;
-import map.RectangularMap;
-import map.Vector2d;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;

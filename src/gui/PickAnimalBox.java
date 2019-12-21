@@ -12,7 +12,7 @@ import map.elements.animal.Animal;
 
 import java.util.ArrayList;
 
-public class AlertBox {
+public class PickAnimalBox {
 
     static Animal animal;
 
@@ -38,7 +38,7 @@ public class AlertBox {
 
         VBox layout = new VBox(10);
 
-        //Add buttons
+
         layout.getChildren().addAll(label,animalList, pickButton);
         layout.setAlignment(Pos.CENTER);
         Scene scene = new Scene(layout);

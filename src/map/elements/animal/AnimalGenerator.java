@@ -1,7 +1,7 @@
 package map.elements.animal;
 
 import map.RectangularMap;
-import map.Vector2d;
+import map.MapTools.Vector2d;
 
 import java.util.Random;
 

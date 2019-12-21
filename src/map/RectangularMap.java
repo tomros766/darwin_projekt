@@ -1,14 +1,15 @@
 package map;
 
+import map.MapTools.MapBorders;
+import map.MapTools.MapStatistics;
+import map.MapTools.MapVisualizer;
+import map.MapTools.Vector2d;
 import map.elements.MapElement;
 import map.elements.animal.Animal;
-import map.elements.animal.GenoType;
 import map.elements.grass.Grass;
 import map.elements.grass.GrassGrower;
 
-import java.awt.geom.Path2D;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class RectangularMap implements IPositionChangeObserver {
@@ -43,11 +44,6 @@ public class RectangularMap implements IPositionChangeObserver {
     public ArrayList<Animal> getAnimals() {
         return new ArrayList<>(animals);
     }
-
-    public Collection<MapElement> getElementswAnimals() {
-        return occupied.values().stream().filter(e -> e.hasAnimals()).distinct().collect(Collectors.toCollection(ArrayList::new));
-    }
-
 
     public ArrayList<MapElement> getGrasses() {
         return occupied.values().stream().filter(e -> e.hasGrass() && !e.hasAnimals()).collect(Collectors.toCollection(ArrayList::new));
@@ -134,7 +130,7 @@ public class RectangularMap implements IPositionChangeObserver {
             if (occupied.containsKey(animal.position))
                 occupied.get(animal.position).removeAnimal(animal);
 
-            if (occupied.containsKey(animal.position) && occupied.get(animal.position).getAnimals().isEmpty())
+            if (occupied.containsKey(animal.position) && occupied.get(animal.position).getAnimals()!=null && occupied.get(animal.position).getAnimals().isEmpty())
                 occupied.remove(animal.position);
 
             animal.perish(this);

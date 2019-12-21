@@ -1,4 +1,6 @@
-package map;
+package map.MapTools;
+
+import map.RectangularMap;
 
 public class MapBorders {
     final public Vector2d lowerLeft;

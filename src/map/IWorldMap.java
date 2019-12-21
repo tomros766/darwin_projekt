@@ -1,5 +1,6 @@
 package map;
 
+import map.MapTools.Vector2d;
 import map.elements.animal.Animal;
 
 /**

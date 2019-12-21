@@ -1,5 +1,6 @@
-package map;
+package map.MapTools;
 
+import map.RectangularMap;
 import map.elements.animal.Animal;
 import map.elements.animal.FollowedAnimal;
 import map.elements.animal.GenoType;
@@ -18,8 +19,8 @@ public class MapStatistics {
     private int round = 0;
     private int countDeadAnimals = 0;
     private double avgLifeTime = 0.0;
-    double avgAnimalsCount = 0;
-    double avgGrassCount = 0;
+    private double avgAnimalsCount = 0;
+    private double avgGrassCount = 0;
     private HashMap <GenoType, Integer> dominantGenoTypes = new HashMap<>();
     private double avgAvgEnergy = 0;
     private double avgAvgChildrenCount = 0;
@@ -39,8 +40,8 @@ public class MapStatistics {
     }
 
     public GenoType getDominantGenoType(){
-        if(map.animals !=null){
-            ArrayList<GenoType> genoTypes = map.animals.stream().map(a -> a.getGenoType()).collect(Collectors.toCollection(ArrayList::new));
+        if(map.getAnimals() !=null){
+            ArrayList<GenoType> genoTypes = map.getAnimals().stream().map(a -> a.getGenoType()).collect(Collectors.toCollection(ArrayList::new));
             return genoTypes.stream()
                     .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
                     .entrySet().stream().max(Comparator.comparing(Map.Entry::getValue))
@@ -51,21 +52,21 @@ public class MapStatistics {
 
     public int countDominantAnimals(){
         GenoType dominantGenotype = getDominantGenoType();
-        return map.animals.stream().filter(a -> a.getGenoType().equals(dominantGenotype)).collect(Collectors.toCollection(ArrayList::new)).size();
+        return map.getAnimals().stream().filter(a -> a.getGenoType().equals(dominantGenotype)).collect(Collectors.toCollection(ArrayList::new)).size();
     }
 
     public int getAvgChildrenCount(){
-        ArrayList<Integer> childrenCount = map.animals.stream().map(animal -> animal.getChildren().size()).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<Integer> childrenCount = map.getAnimals().stream().map(animal -> animal.getChildren().size()).collect(Collectors.toCollection(ArrayList::new));
         return childrenCount.stream().reduce(0, (a,b) -> a+b)/childrenCount.size();
     }
 
     public int getAvgEnergy(){
-        ArrayList<Double> energies = map.animals.stream().map(animal -> animal.getEnergy()).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<Double> energies = map.getAnimals().stream().map(animal -> animal.getEnergy()).collect(Collectors.toCollection(ArrayList::new));
         return (int) (energies.stream().reduce(0.0, (a,b) -> a+b)/energies.size());
     }
 
     public int countAnimals(){
-        return map.animals.size();
+        return map.getAnimals().size();
     }
 
     public int countGrasses(){

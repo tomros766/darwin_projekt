@@ -1,17 +1,20 @@
-package map;
+package map.MapTools;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public enum MapDirection {
     NORTH(0),
-    NORTHWEST(1),
-    NORTHEAST(2),
-    SOUTH(3),
-    SOUTHWEST(4),
-    SOUTHEAST(5),
+    NORTHEAST(1),
+    EAST(2),
+    SOUTHEAST(3),
+    SOUTH(4),
+    SOUTHWEST(5),
     WEST(6),
-    EAST(7);
+    NORTHWEST(7);
+
+
+
 
     private int value;
     private static Map map = new HashMap<>();
@@ -63,47 +66,11 @@ public enum MapDirection {
     }
 
     public MapDirection next() {
-        switch (this) {
-            case NORTH:
-                return NORTHWEST;
-            case NORTHWEST:
-                return WEST;
-            case WEST:
-                return SOUTHWEST;
-            case SOUTHWEST:
-                return SOUTH;
-            case SOUTH:
-                return SOUTHEAST;
-            case SOUTHEAST:
-                return EAST;
-            case EAST:
-                return NORTHEAST;
-            case NORTHEAST:
-                return NORTH;
-        }
-        return null;
+        return valueOf((this.getValue() + 1) % map.size());
     }
 
     public MapDirection previous() {
-        switch (this) {
-            case NORTH:
-                return NORTHEAST;
-            case NORTHEAST:
-                return EAST;
-            case EAST:
-                return SOUTHEAST;
-            case SOUTHEAST:
-                return SOUTH;
-            case SOUTH:
-                return SOUTHWEST;
-            case SOUTHWEST:
-                return WEST;
-            case WEST:
-                return NORTHWEST;
-            case NORTHWEST:
-                return NORTH;
-        }
-        return null;
+        return valueOf(getValue() - 1);
     }
 
     public Vector2d toUnitVector(){

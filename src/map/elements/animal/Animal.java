@@ -1,9 +1,9 @@
 package map.elements.animal;
 
 import map.IPositionChangeObserver;
-import map.MapDirection;
+import map.MapTools.MapDirection;
 import map.RectangularMap;
-import map.Vector2d;
+import map.MapTools.Vector2d;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ public class Animal implements Comparable{
         this.genoType = genoType;
         position = setPosition.copy();
         this.energy = energy;
-        motorics = new AnimalMotorics(map,this);
+        motorics = new AnimalMotorics(this);
         map.place(this);
     }
 
@@ -55,7 +55,7 @@ public class Animal implements Comparable{
         double childEnergy = (this.energy + subservient.energy)/4;
         this.energy *= 0.75;
         subservient.energy *= 0.75;
-//        System.out.println("miracle of life");
+
         Animal baby = new Animal(newBeginning, new GenoType(this.genoType,subservient.genoType), map, childEnergy);
         this.children.add(baby);
         subservient.children.add(baby);

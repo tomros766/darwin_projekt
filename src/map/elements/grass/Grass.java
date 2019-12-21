@@ -1,6 +1,6 @@
 package map.elements.grass;
 
-import map.Vector2d;
+import map.MapTools.Vector2d;
 
 public class Grass {
     public final Vector2d position;
@@ -14,5 +14,4 @@ public class Grass {
     public String toString(){
         return "g";
     }
-
 }
